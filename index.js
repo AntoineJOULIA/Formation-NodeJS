@@ -5,8 +5,6 @@ const readline = require("readline");
 const fileName = "products.json";
 const filePath = path.join(__dirname, fileName);
 
-let allProducts;
-
 function getAllProducts(displayData = true, callback = () => {}) {
   fs.readFile(filePath, (err, data) => {
     if (err) {
@@ -14,7 +12,7 @@ function getAllProducts(displayData = true, callback = () => {}) {
       return callback(err);
     }
 
-    allProducts = JSON.parse(data);
+    const allProducts = JSON.parse(data);
     if (displayData) {
       console.log("Bienvenue. Voici les produits disponibles:");
       allProducts.forEach((product) => {
@@ -26,7 +24,7 @@ function getAllProducts(displayData = true, callback = () => {}) {
   });
 }
 
-function orderProductById(id) {
+function orderProductById(id, allProducts) {
   const product = allProducts.find((product) => product.id === id);
   product.orders_counter++;
 
@@ -54,6 +52,6 @@ rl.on("line", function (line) {
 
     const elements = line.split(" ");
     const id = elements[elements.length - 1];
-    orderProductById(id);
+    orderProductById(id, data);
   });
 });
