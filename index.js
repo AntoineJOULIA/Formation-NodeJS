@@ -13,6 +13,7 @@ function getAllProducts(displayData = true, callback = () => {}) {
     }
 
     const allProducts = JSON.parse(data);
+
     if (displayData) {
       console.log("Bienvenue. Voici les produits disponibles:");
       allProducts.forEach((product) => {
