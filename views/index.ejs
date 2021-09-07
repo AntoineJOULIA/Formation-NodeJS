@@ -1,0 +1,24 @@
+<h1>Available products</h1>
+
+<table>
+  <thead>
+    <tr>
+      <td>ID</td>
+      <td>Title</td>
+      <td>Price</td>
+      <td>Counter</td>
+      <td></td>
+    </tr>
+  </thead>
+  <tbody>
+    <% products.forEach(product => {%>
+      <tr>
+        <td><%= product.id %></td>
+        <td><%= product.name %></td>
+        <td><%= product.EUR_price %> €</td>
+        <td><%= product.orders_counter %></td>
+        <td><button>Order</button></td>
+      </tr>
+    <% }); %>
+  </tbody>
+</table>
