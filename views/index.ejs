@@ -28,10 +28,22 @@
         <td><%= product.name %></td>
         <td><%= product.EUR_price %> €</td>
         <td><%= product.orders_counter %></td>
-        <td><button>Order</button></td>
+        <td><button onclick=order(<%= product.id %>)>Order</button></td>
       </tr>
     <% }); %>
   </tbody>
 </table>
+
+<script>
+  function order(id) {
+    fetch(`http://localhost:3000/${id}`, {method: "POST"})
+      .then(response => response.json())
+      .then(product => {
+        alert(
+          `Commande terminée.
+        Voici votre fichier ${product.file_link} (${product.orders_counter})`
+      )})
+  }
+</script>
 </body>
 </html>
