@@ -1,0 +1,17 @@
+html, body {
+  font-family: Arial, Helvetica, sans-serif
+}
+
+h1 {
+  color: midnightblue;
+}
+
+table {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+td {
+  padding: .25em .5em;
+  border: 1px solid black;
+}

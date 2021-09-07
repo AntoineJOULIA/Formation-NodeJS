@@ -7,6 +7,8 @@ const port = 3000;
 const productsFileName = "products.json";
 const productsFilePath = path.join(__dirname, productsFileName);
 
+app.use(express.static(__dirname + "/public"));
+
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
