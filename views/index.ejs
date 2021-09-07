@@ -34,9 +34,17 @@
   </tbody>
 </table>
 
+<a href="/login">Login</a>
+
 <script>
-  function order(id) {
-    fetch(`http://localhost:3000/${id}`, {method: "POST"})
+  function order(id) {    
+    fetch(`http://localhost:3000/${id}`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify({email: "riri@donald.com", password: "riri1"})
+    })
       .then(response => response.json())
       .then(product => {
         updateRow(product);
