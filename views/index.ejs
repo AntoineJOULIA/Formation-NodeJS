@@ -23,7 +23,7 @@
   </thead>
   <tbody>
     <% products.forEach(product => {%>
-      <tr>
+      <tr data-product-id=<%= product.id %>>
         <td><%= product.id %></td>
         <td><%= product.name %></td>
         <td><%= product.EUR_price %> €</td>
@@ -39,11 +39,19 @@
     fetch(`http://localhost:3000/${id}`, {method: "POST"})
       .then(response => response.json())
       .then(product => {
+        updateRow(product);
         alert(
           `Commande terminée.
         Voici votre fichier ${product.file_link} (${product.orders_counter})`
       )})
   }
+
+  function updateRow(product) {
+    const rowToUpdate = document.querySelector(`[data-product-id="${product.id}"]`)
+    const tdToUpdate = rowToUpdate.children[3]
+    tdToUpdate.innerHTML = product.orders_counter;
+    return product
+  } 
 </script>
 </body>
 </html>
