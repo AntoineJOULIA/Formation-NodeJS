@@ -37,17 +37,26 @@
     <% }); %>
   </tbody>
 </table>
-<a href="/login">Login</a>
+<!-- <a href="/login">Login</a> -->
+<button onclick=getOrders()>Get orders</button>
 
 <script>
 
-  function order(id, credentials = {}) {
+  // function order(id, credentials = {}) {
+  //   return fetch(`http://localhost:3000/${id}`, {
+  //     method: "POST",
+  //     headers: {
+  //       "content-type": "application/json"
+  //     },
+  //     body: JSON.stringify(credentials)
+  //   })
+    
+  function order(id) {
     return fetch(`http://localhost:3000/${id}`, {
       method: "POST",
       headers: {
         "content-type": "application/json"
-      },
-      body: JSON.stringify(credentials)
+      }
     })
       .then(response => {
         if (response.status === 200) {
@@ -87,6 +96,13 @@ function promptPassword() {
     tdToUpdate.innerHTML = product.orders_counter;
     return product
   } 
+
+  async function getOrders() {
+    const response = await fetch(`http://localhost:3000/orders`)
+    const orders = await response.json()
+    console.log("The orders:")
+    console.log(orders)
+  }
 </script>
 </body>
 </html>
