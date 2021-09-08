@@ -37,22 +37,45 @@
 <a href="/login">Login</a>
 
 <script>
-  function order(id) {    
-    fetch(`http://localhost:3000/${id}`, {
+  function order(id, credentials = {}) {    
+    return fetch(`http://localhost:3000/${id}`, {
       method: "POST",
       headers: {
         "content-type": "application/json"
       },
-      body: JSON.stringify({email: "riri@donald.com", password: "riri1"})
+      body: JSON.stringify(credentials)
     })
-      .then(response => response.json())
+      .then(response => {
+        if (response.status === 200) {
+          response.json()
+            .then(product => validateOrder(product))
+        } else {
+          const email = promptEmail()
+          const password = promptPassword()
+          return order(id, {email, password})
+        }
+      })
       .then(product => {
-        updateRow(product);
-        alert(
-          `Commande terminée.
-        Voici votre fichier ${product.file_link} (${product.orders_counter})`
-      )})
+        if (product) validateOrder(product)})
   }
+
+  function validateOrder(product) {
+    updateRow(product)
+    alert(
+      `Commande terminée.
+    Voici votre fichier ${product.file_link} (${product.orders_counter})`
+    )
+  }
+
+  function promptEmail() {
+    const email = prompt('email');
+    return email
+  }
+
+function promptPassword() {
+  const password = prompt('password');
+  return password
+}
 
   function updateRow(product) {
     const rowToUpdate = document.querySelector(`[data-product-id="${product.id}"]`)
