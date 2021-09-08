@@ -28,16 +28,20 @@
         <td><%= product.name %></td>
         <td><%= product.EUR_price %> €</td>
         <td><%= product.orders_counter %></td>
-        <td><button onclick=order(<%= product.id %>)>Order</button></td>
+        <td>
+          <button onclick=order(<%= product.id %>)>
+            Order
+          </button>
+        </td>
       </tr>
     <% }); %>
   </tbody>
 </table>
-
 <a href="/login">Login</a>
 
 <script>
-  function order(id, credentials = {}) {    
+
+  function order(id, credentials = {}) {
     return fetch(`http://localhost:3000/${id}`, {
       method: "POST",
       headers: {
