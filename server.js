@@ -22,7 +22,7 @@ mongoose.connect("mongodb://localhost:27017/test");
 const port = 3000;
 
 app.use(express.static(__dirname + "/public"));
-// app.use(helmet());
+app.use(helmet());
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
