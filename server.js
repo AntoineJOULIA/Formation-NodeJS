@@ -14,6 +14,7 @@ const methodOverride = require("method-override");
 const restify = require("express-restify-mongoose");
 const axios = require("axios");
 const bcrypt = require("bcrypt");
+const helmet = require("helmet");
 
 const app = express();
 mongoose.connect("mongodb://localhost:27017/test");
@@ -21,6 +22,7 @@ mongoose.connect("mongodb://localhost:27017/test");
 const port = 3000;
 
 app.use(express.static(__dirname + "/public"));
+// app.use(helmet());
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -96,10 +98,7 @@ app.post("/register", async (req, res) => {
       email,
       password: hash,
     });
-    user
-      .save()
-      // .then((savedUser) => res.json(savedUser))
-      .catch((e) => console.error(e));
+    user.save().catch((e) => console.error(e));
   });
   return res.send({ signin: true });
 });

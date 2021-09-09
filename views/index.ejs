@@ -47,36 +47,18 @@
   <script>
       
     async function order(id) {
-      return fetch(`http://localhost:3000/${id}`, {
+      const response = await fetch(`http://localhost:3000/${id}`, {
         method: "POST",
         headers: {
           "content-type": "application/json"
         }
-      })
-        .then(response => {
-          if (response.status === 200) {
-            response.json()
-              .then(product => validateOrder(product))
-          } else {
-            const email = promptEmail()
-            const password = promptPassword()
-            return order(id, {email, password})
-          }
-        })
-        .then(product => {
-          if (product) validateOrder(product)})
-      // const response = await fetch(`http://localhost:3000/${id}`, {
-      //   method: "POST",
-      //   headers: {
-      //     "content-type": "application/json"
-      //   }
-      // });
-      // if (response.status === 200) {
-      //   const product = await response.json();
-      //   validateOrder(product);
-      // } else {
-      //   fetch("http://localhost:3000/auth")
-      // }      
+      });
+      if (response.status === 200) {
+        const product = await response.json();
+        validateOrder(product);
+      } else {
+        fetch("http://localhost:3000/auth")
+      }      
     }
 
     function validateOrder(product) {
@@ -86,16 +68,6 @@
       Voici votre fichier ${product.file_link} (${product.orders_counter})`
       )
     }
-
-    function promptEmail() {
-      const email = prompt('email');
-      return email
-    }
-
-  function promptPassword() {
-    const password = prompt('password');
-    return password
-  }
 
     function updateRow(product) {
       const rowToUpdate = document.querySelector(`[data-product-id="${product.id}"]`)
