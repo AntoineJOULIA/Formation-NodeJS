@@ -13,7 +13,8 @@ getOrdersButton.onclick = () => getOrders();
 getProductsButton.onclick = () => getProducts();
 
 async function order(id) {
-  const response = await fetch(`http://localhost:3000/${id}`, {
+  // const response = await fetch(`http://localhost:3000/${id}`, {
+  const response = await fetch(`/${id}`, {
     method: "POST",
     headers: {
       "content-type": "application/json",
@@ -23,7 +24,8 @@ async function order(id) {
     const product = await response.json();
     validateOrder(product);
   } else {
-    fetch("http://localhost:3000/auth");
+    // fetch("http://localhost:3000/auth");
+    fetch("/auth");
   }
 }
 
