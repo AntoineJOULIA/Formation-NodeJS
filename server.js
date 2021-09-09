@@ -4,13 +4,16 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const cookieParser = require("cookie-parser");
 const expressSession = require("express-session");
 const productModel = require("./models/product");
 const userModel = require("./models/user");
 const orderModel = require("./models/order");
 const connectMongo = require("connect-mongo");
+const methodOverride = require("method-override");
+const restify = require("express-restify-mongoose");
+const axios = require("axios");
+const bcrypt = require("bcrypt");
 
 const app = express();
 mongoose.connect("mongodb://localhost:27017/test");
@@ -21,6 +24,9 @@ app.use(express.static(__dirname + "/public"));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(methodOverride());
+
+restify.serve(app, productModel);
 
 passport.serializeUser(function (user, done) {
   done(null, user.id);
@@ -40,27 +46,18 @@ passport.use(
     userModel.findOne({ email: username }, function (err, user) {
       if (err) return done(err);
       if (!user) return done(null, false);
-      if (user.password !== password) return done(null, false);
-      return done(null, user);
+      bcrypt.compare(password, user.password, (err, match) => {
+        if (match) {
+          return done(null, user);
+        } else {
+          return done(null, false);
+        }
+      });
+      // if (user.password !== password) return done(null, false);
+      // return done(null, user);
     });
   })
 );
-
-// passport.use(
-//   new GoogleStrategy(
-//     {
-//       clientID:
-//         "905977279441-tp1gcgfn9gk0vg739s6bd3g6ob1mrkiq.apps.googleusercontent.com",
-//       clientSecret: "m_bbYJTvIhTaTeav3-y1OdoQ",
-//       callbackURL: "http://localhost:3000/",
-//     },
-//     function (accessToken, refreshToken, profile, cb) {
-//       User.findOrCreate({ googleId: profile.id }, function (err, user) {
-//         return cb(err, user);
-//       });
-//     }
-//   )
-// );
 
 app.use(
   expressSession({
@@ -76,26 +73,43 @@ app.use(passport.session());
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
   if (!req.isAuthenticated()) {
     return res.redirect("/login");
   }
+  try {
+    const products = await getAllProducts();
+    return res.render("index", { products });
+  } catch (error) {
+    return res.status(500).send(error.toString());
+  }
+});
 
-  getAllProducts((err, data) => {
-    if (err) res.status(500).send(err.toString());
+app.get("/signin", (req, res) => {
+  return res.render("register");
+});
 
-    res.render("index", {
-      products: data,
+app.post("/register", async (req, res) => {
+  const { email, password } = req.body;
+  bcrypt.hash(password, 10, function (err, hash) {
+    const user = new userModel({
+      email,
+      password: hash,
     });
+    user
+      .save()
+      // .then((savedUser) => res.json(savedUser))
+      .catch((e) => console.error(e));
   });
+  return res.send({ signin: true });
 });
 
 app.get("/login", (req, res) => {
-  res.render("login");
+  return res.render("login");
 });
 
 app.post("/auth", checkAuthentication, (req, res) => {
-  res.send({ authenticated: true });
+  return res.send({ authenticated: true });
 });
 
 app.post("/:id", (req, res) => {
@@ -148,7 +162,6 @@ app.listen(port, () =>
 
 function checkAuthentication(req, res, next) {
   // wrap passport.authenticate call in a middleware function
-  // passport.authenticate("google", (err, user, info) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) return next(err);
     if (!user) return res.status(401).json({ message: info || "no user" });
@@ -161,8 +174,9 @@ function checkAuthentication(req, res, next) {
   })(req, res, next);
 }
 
-function getAllProducts(callback) {
-  productModel.find({}, callback);
+async function getAllProducts() {
+  const products = await axios.get("http://localhost:3000/api/v1/Product");
+  return products.data;
 }
 
 function orderProductById(id, callback) {

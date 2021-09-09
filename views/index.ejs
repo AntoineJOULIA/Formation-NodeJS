@@ -8,112 +8,115 @@
   <title>Document</title>
 </head>
 <body>
+  <header>    
+    <a href="/signin">Sign in</a>
+    <a href="/login">Login</a>
+  </header>
   
-<h1>Available products</h1>
+  <h1>Available products</h1>
 
-<table>
-  <thead>
-    <tr>
-      <td>ID</td>
-      <td>Title</td>
-      <td>Price</td>
-      <td>Counter</td>
-      <td></td>
-    </tr>
-  </thead>
-  <tbody>
-    <% products.forEach(product => {%>
-      <tr data-product-id=<%= product.id %>>
-        <td><%= product.id %></td>
-        <td><%= product.name %></td>
-        <td><%= product.EUR_price %> €</td>
-        <td><%= product.orders_counter %></td>
-        <td>
-          <button onclick=order(<%= product.id %>)>
-            Order
-          </button>
-        </td>
+  <table>
+    <thead>
+      <tr>
+        <td>ID</td>
+        <td>Title</td>
+        <td>Price</td>
+        <td>Counter</td>
+        <td></td>
       </tr>
-    <% }); %>
-  </tbody>
-</table>
-<!-- <a href="/login">Login</a> -->
-<button onclick=getOrders()>Get orders</button>
-<button onclick=getProducts()>Get products</button>
+    </thead>
+    <tbody>
+      <% products.forEach(product => {%>
+        <tr data-product-id=<%= product.id %>>
+          <td><%= product.id %></td>
+          <td><%= product.name %></td>
+          <td><%= product.EUR_price %> €</td>
+          <td><%= product.orders_counter %></td>
+          <td>
+            <button onclick=order(<%= product.id %>)>
+              Order
+            </button>
+          </td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+  <button onclick=getOrders()>Get orders</button>
+  <button onclick=getProducts()>Get products</button>
 
-<script>
-    
-  async function order(id) {
-    return fetch(`http://localhost:3000/${id}`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json"
-      }
-    })
-      .then(response => {
-        if (response.status === 200) {
-          response.json()
-            .then(product => validateOrder(product))
-        } else {
-          const email = promptEmail()
-          const password = promptPassword()
-          return order(id, {email, password})
+  <script>
+      
+    async function order(id) {
+      return fetch(`http://localhost:3000/${id}`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json"
         }
       })
-      .then(product => {
-        if (product) validateOrder(product)})
-    // const response = await fetch(`http://localhost:3000/${id}`, {
-    //   method: "POST",
-    //   headers: {
-    //     "content-type": "application/json"
-    //   }
-    // });
-    // if (response.status === 200) {
-    //   const product = await response.json();
-    //   validateOrder(product);
-    // } else {
-    //   fetch("http://localhost:3000/auth")
-    // }      
+        .then(response => {
+          if (response.status === 200) {
+            response.json()
+              .then(product => validateOrder(product))
+          } else {
+            const email = promptEmail()
+            const password = promptPassword()
+            return order(id, {email, password})
+          }
+        })
+        .then(product => {
+          if (product) validateOrder(product)})
+      // const response = await fetch(`http://localhost:3000/${id}`, {
+      //   method: "POST",
+      //   headers: {
+      //     "content-type": "application/json"
+      //   }
+      // });
+      // if (response.status === 200) {
+      //   const product = await response.json();
+      //   validateOrder(product);
+      // } else {
+      //   fetch("http://localhost:3000/auth")
+      // }      
+    }
+
+    function validateOrder(product) {
+      updateRow(product)
+      alert(
+        `Commande terminée.
+      Voici votre fichier ${product.file_link} (${product.orders_counter})`
+      )
+    }
+
+    function promptEmail() {
+      const email = prompt('email');
+      return email
+    }
+
+  function promptPassword() {
+    const password = prompt('password');
+    return password
   }
 
-  function validateOrder(product) {
-    updateRow(product)
-    alert(
-      `Commande terminée.
-    Voici votre fichier ${product.file_link} (${product.orders_counter})`
-    )
-  }
+    function updateRow(product) {
+      const rowToUpdate = document.querySelector(`[data-product-id="${product.id}"]`)
+      const tdToUpdate = rowToUpdate.children[3]
+      tdToUpdate.innerHTML = product.orders_counter;
+      return product
+    } 
 
-  function promptEmail() {
-    const email = prompt('email');
-    return email
-  }
+    async function getOrders() {
+      const response = await fetch(`http://localhost:3000/orders`)
+      const orders = await response.json()
+      console.log("The orders:")
+      console.log(orders)
+    }
 
-function promptPassword() {
-  const password = prompt('password');
-  return password
-}
-
-  function updateRow(product) {
-    const rowToUpdate = document.querySelector(`[data-product-id="${product.id}"]`)
-    const tdToUpdate = rowToUpdate.children[3]
-    tdToUpdate.innerHTML = product.orders_counter;
-    return product
-  } 
-
-  async function getOrders() {
-    const response = await fetch(`http://localhost:3000/orders`)
-    const orders = await response.json()
-    console.log("The orders:")
-    console.log(orders)
-  }
-
-  async function getProducts() {
-    const response = await fetch("http://localhost:3000/products")
-    const products = await response.json()
-    console.log("The products:")
-    console.table(products)
-  }
-</script>
+    async function getProducts() {
+      const response = await fetch("http://localhost:3000/products")
+      const products = await response.json()
+      console.log("The products:")
+      console.table(products)
+    }
+  </script>
 </body>
 </html>
