@@ -79,6 +79,7 @@ app.get("/", async (req, res) => {
   if (!req.isAuthenticated()) {
     return res.redirect("/login");
   }
+  debugger;
   try {
     const products = await getAllProducts();
     return res.render("index", { products });
@@ -143,6 +144,7 @@ app.get("/products", async (req, res) => {
     return res.status(401).json({ message: "no user" });
   }
   const user = req.user;
+  debugger;
   const orders = await getOrders(user._id, (err, orders) => {
     if (err) return console.error(err);
 

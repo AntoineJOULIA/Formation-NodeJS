@@ -2,13 +2,12 @@
   "name": "workshop",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js",
-    "httpServer": "nodemon http-server.js",
-    "ws": "nodemon ws/websocket.js",
-    "test": "mocha tests/"
+    "dev": "nodemon src/index.js",
+    "test": "mocha src/tests/",
+    "build": "webpack"
   },
   "keywords": [],
   "author": "",
@@ -35,7 +34,7 @@
   },
   "devDependencies": {
     "mocha": "^9.1.1",
-    "webpack": "^5.52.0",
+    "webpack": "^4.46.0",
     "webpack-cli": "^4.8.0"
   }
 }
