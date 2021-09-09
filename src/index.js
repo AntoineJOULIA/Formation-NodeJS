@@ -69,7 +69,7 @@ app.use(
     secret: "secretPhrase",
     resave: false,
     saveUninitialized: true,
-    store: new connectMongo({ mongoUrl: "mongodb://localhost:27017/test" }),
+    store: new connectMongo({ mongoUrl: process.env.DB_URL }),
   })
 );
 app.use(passport.initialize());
@@ -179,7 +179,7 @@ function checkAuthentication(req, res, next) {
 }
 
 async function getAllProducts() {
-  const products = await axios.get("http://localhost:3000/api/v1/Product");
+  const products = await axios.get(`${process.env.SITE_URL}/api/v1/Product`);
   return products.data;
 }
 

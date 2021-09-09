@@ -6,7 +6,8 @@ form.addEventListener("submit", async (event) => {
   const email = emailInput.value;
   const password = passwordInput.value;
   const credentials = { email, password };
-  let response = await fetch(`http://localhost:3000/register`, {
+  // let response = await fetch(`http://localhost:3000/register`, {
+  let response = await fetch(`/register`, {
     method: "POST",
     headers: {
       "content-type": "application/json",

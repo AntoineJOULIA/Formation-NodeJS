@@ -45,14 +45,16 @@ function updateRow(product) {
 }
 
 async function getOrders() {
-  const response = await fetch(`http://localhost:3000/orders`);
+  // const response = await fetch(`http://localhost:3000/orders`);
+  const response = await fetch(`/orders`);
   const orders = await response.json();
   console.log("The orders:");
   console.log(orders);
 }
 
 async function getProducts() {
-  const response = await fetch("http://localhost:3000/products");
+  // const response = await fetch("http://localhost:3000/products");
+  const response = await fetch("/products");
   const products = await response.json();
   console.log("The products:");
   console.table(products);

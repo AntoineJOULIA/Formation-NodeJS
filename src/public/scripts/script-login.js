@@ -7,7 +7,8 @@ form.addEventListener("submit", async (event) => {
   const password = passwordInput.value;
   console.log(email, password);
   const credentials = { email, password };
-  let response = await fetch(`http://localhost:3000/auth`, {
+  // let response = await fetch(`http://localhost:3000/auth`, {
+  let response = await fetch(`/auth`, {
     method: "POST",
     headers: {
       "content-type": "application/json",
