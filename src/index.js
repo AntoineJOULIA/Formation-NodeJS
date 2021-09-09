@@ -181,7 +181,7 @@ function checkAuthentication(req, res, next) {
 }
 
 async function getAllProducts() {
-  const products = await axios.get(`${process.env.SITE_URL}/api/v1/Product`);
+  const products = await axios.get(`${process.env.SITE_URL}api/v1/Product`);
   return products.data;
 }
 
