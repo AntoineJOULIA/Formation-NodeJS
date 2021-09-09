@@ -15,9 +15,12 @@ const restify = require("express-restify-mongoose");
 const axios = require("axios");
 const bcrypt = require("bcrypt");
 const helmet = require("helmet");
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const app = express();
-mongoose.connect("mongodb://localhost:27017/test");
+mongoose.connect(process.env.DB_URL);
 
 const port = 3000;
 
