@@ -17,7 +17,9 @@ const bcrypt = require("bcrypt");
 const helmet = require("helmet");
 const dotenv = require("dotenv");
 
-dotenv.config();
+if (NODE_ENV !== "production") {
+  dotenv.config();
+}
 
 const app = express();
 mongoose.connect(process.env.DB_URL);
