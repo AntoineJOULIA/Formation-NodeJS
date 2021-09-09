@@ -148,8 +148,8 @@ app.listen(port, () =>
 
 function checkAuthentication(req, res, next) {
   // wrap passport.authenticate call in a middleware function
-  // passport.authenticate("google", (err, user, info) => {
-  passport.authenticate("local", (err, user, info) => {
+  passport.authenticate("google", (err, user, info) => {
+    // passport.authenticate("local", (err, user, info) => {
     if (err) return next(err);
     if (!user) return res.status(401).json({ message: info || "no user" });
 

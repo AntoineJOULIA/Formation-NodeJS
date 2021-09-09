@@ -39,19 +39,11 @@
 </table>
 <!-- <a href="/login">Login</a> -->
 <button onclick=getOrders()>Get orders</button>
+<button onclick=getProducts()>Get products</button>
 
 <script>
-
-  // function order(id, credentials = {}) {
-  //   return fetch(`http://localhost:3000/${id}`, {
-  //     method: "POST",
-  //     headers: {
-  //       "content-type": "application/json"
-  //     },
-  //     body: JSON.stringify(credentials)
-  //   })
     
-  function order(id) {
+  async function order(id) {
     return fetch(`http://localhost:3000/${id}`, {
       method: "POST",
       headers: {
@@ -70,6 +62,18 @@
       })
       .then(product => {
         if (product) validateOrder(product)})
+    // const response = await fetch(`http://localhost:3000/${id}`, {
+    //   method: "POST",
+    //   headers: {
+    //     "content-type": "application/json"
+    //   }
+    // });
+    // if (response.status === 200) {
+    //   const product = await response.json();
+    //   validateOrder(product);
+    // } else {
+    //   fetch("http://localhost:3000/auth")
+    // }      
   }
 
   function validateOrder(product) {
@@ -102,6 +106,13 @@ function promptPassword() {
     const orders = await response.json()
     console.log("The orders:")
     console.log(orders)
+  }
+
+  async function getProducts() {
+    const response = await fetch("http://localhost:3000/products")
+    const products = await response.json()
+    console.log("The products:")
+    console.table(products)
   }
 </script>
 </body>
