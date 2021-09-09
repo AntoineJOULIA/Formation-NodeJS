@@ -17,7 +17,7 @@ const bcrypt = require("bcrypt");
 const helmet = require("helmet");
 const dotenv = require("dotenv");
 
-if (NODE_ENV !== "production") {
+if (process.env.NODE_ENV !== "production") {
   dotenv.config();
 }
 
