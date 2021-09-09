@@ -27,13 +27,13 @@
     </thead>
     <tbody>
       <% products.forEach(product => {%>
-        <tr data-product-id=<%= product.id %>>
+        <tr data-product-row=<%= product.id %>>
           <td><%= product.id %></td>
           <td><%= product.name %></td>
           <td><%= product.EUR_price %> €</td>
           <td><%= product.orders_counter %></td>
           <td>
-            <button onclick=order(<%= product.id %>)>
+            <button data-type="order-btn" data-product-id=<%= product.id %>>
               Order
             </button>
           </td>
@@ -41,8 +41,8 @@
       <% }); %>
     </tbody>
   </table>
-  <button onclick=getOrders()>Get orders</button>
-  <button onclick=getProducts()>Get products</button>
+  <button id="get-orders-btn" >Get orders</button>
+  <button id="get-products-btn" >Get products</button>
 
   <script src="scripts/script-index.js"></script>
 </body>

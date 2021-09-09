@@ -1,3 +1,17 @@
+const orderButtons = document.querySelectorAll("[data-type='order-btn'");
+const getOrdersButton = document.getElementById("get-orders-btn");
+const getProductsButton = document.getElementById("get-products-btn");
+
+[...orderButtons].forEach((button) => {
+  button.addEventListener("click", (e) => {
+    const productId = e.target.dataset.productId;
+    order(productId);
+  });
+});
+
+getOrdersButton.onclick = () => getOrders();
+getProductsButton.onclick = () => getProducts();
+
 async function order(id) {
   const response = await fetch(`http://localhost:3000/${id}`, {
     method: "POST",
@@ -23,7 +37,7 @@ function validateOrder(product) {
 
 function updateRow(product) {
   const rowToUpdate = document.querySelector(
-    `[data-product-id="${product.id}"]`
+    `[data-product-row="${product.id}"]`
   );
   const tdToUpdate = rowToUpdate.children[3];
   tdToUpdate.innerHTML = product.orders_counter;
