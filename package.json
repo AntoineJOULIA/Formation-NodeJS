@@ -4,10 +4,9 @@
   "description": "",
   "main": "src/server.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "test": "mocha src/tests/",
-    "build": "webpack"
+    "test": "mocha src/tests/"
   },
   "keywords": [],
   "author": "",
